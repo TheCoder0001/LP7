@@ -1,0 +1,36 @@
+using UnityEngine;
+
+public class BounceControl : MonoBehaviour
+{
+    public float stopAfterSeconds = 10f;
+
+    Rigidbody rb;
+    float timer;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        timer = stopAfterSeconds;
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+
+        // gradually reduce bounce
+        rb.linearVelocity = new Vector3(
+            rb.linearVelocity.x * 0.995f,
+            rb.linearVelocity.y,
+            rb.linearVelocity.z * 0.995f
+        );
+
+        // stop after specified time
+        if (timer <= 0)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.useGravity = false;
+            enabled = false;
+        }
+    }
+}

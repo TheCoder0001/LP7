@@ -1,0 +1,61 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public float moveSpeed = 5f;
+    public Transform groundCheck; // 🔥 Empty GameObject under player
+    public LayerMask groundLayer;  // 🔥 Set to Ground layer
+    public float groundCheckRadius = 0.2f; // 🔥 How big the check circle should be
+
+    private Rigidbody2D rb;
+    private PlayerInputActions playerInputActions;
+    private Vector2 moveInput;
+    private bool isGrounded; // 🔥 Whether the player is touching the ground
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        playerInputActions = new PlayerInputActions();
+        
+        playerInputActions.Player.Enable();
+        playerInputActions.Player.Move.performed += OnMovePerformed;
+        playerInputActions.Player.Move.canceled += OnMoveCanceled;
+    }
+
+    private void OnMovePerformed(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    private void OnMoveCanceled(InputAction.CallbackContext context)
+    {
+        moveInput = Vector2.zero;
+    }
+
+    private void Update()
+    {
+        // 🔥 Ground Check Logic
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        // 🔥 Optional: Visualize ground check in Scene view
+        Debug.DrawRay(groundCheck.position, Vector3.down * groundCheckRadius, Color.red);
+    }
+
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = moveInput * moveSpeed;
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInputActions.Player.Disable();
+        playerInputActions.Player.Move.performed -= OnMovePerformed;
+        playerInputActions.Player.Move.canceled -= OnMoveCanceled;
+    }
+}

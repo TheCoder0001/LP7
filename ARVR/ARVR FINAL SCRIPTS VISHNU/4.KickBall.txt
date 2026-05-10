@@ -1,0 +1,42 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class KickBall : MonoBehaviour
+{
+    Rigidbody rb;
+
+    int speedLevel = 0;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        // New Input System mouse click
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            transform.position = new Vector3(0, 0.5f, 0);
+
+            speedLevel++;
+
+            if (speedLevel > 3)
+                speedLevel = 1;
+
+            float force = 0;
+
+            if (speedLevel == 1)
+                force = 200f;     // slow
+            else if (speedLevel == 2)
+                force = 400f;     // medium
+            else if (speedLevel == 3)
+                force = 700f;     // fast
+
+            rb.AddForce(Vector3.forward * force);
+        }
+    }
+}

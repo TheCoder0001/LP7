@@ -1,0 +1,30 @@
+using UnityEngine;
+public class MaterialChanger : MonoBehaviour
+{
+ public Renderer cubeRenderer;
+ public Renderer planeRenderer;
+ public Renderer sphereRenderer;
+ public Material cubeMat1;
+ public Material cubeMat2;
+ public Material planeMat1;
+ public Material planeMat2;
+ public Material sphereMat1;
+ public Material sphereMat2;
+ bool changed = false;
+ public void ChangeObjects()
+ {
+ changed = !changed;
+ if (changed)
+ {
+ cubeRenderer.material = cubeMat2;
+ planeRenderer.material = planeMat2;
+ sphereRenderer.material = sphereMat2;
+ }
+ else
+ {
+ cubeRenderer.material = cubeMat1;
+ planeRenderer.material = planeMat1;
+ sphereRenderer.material = sphereMat1;
+ }
+ }
+}

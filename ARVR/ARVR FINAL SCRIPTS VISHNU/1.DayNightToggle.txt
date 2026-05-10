@@ -1,0 +1,53 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class DayNightToggle : MonoBehaviour
+{
+    [Header("Light Reference")]
+    public Light directionalLight;
+
+    [Header("Day Settings")]
+    public Color dayLightColor = Color.white;
+    public float dayIntensity = 1.2f;
+    public Color daySkyColor = new Color(0.53f, 0.81f, 0.98f);
+
+    [Header("Night Settings")]
+    public Color nightLightColor = new Color(0.1f, 0.1f, 0.35f);
+    public float nightIntensity = 0.3f;
+    public Color nightSkyColor = new Color(0.02f, 0.02f, 0.05f);
+
+    private bool isDay = true;
+
+    void Start()
+    {
+        SetDay();
+    }
+
+    void Update()
+    {
+        // NEW INPUT SYSTEM: Mouse click
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (isDay)
+                SetNight();
+            else
+                SetDay();
+        }
+    }
+
+    void SetDay()
+    {
+        RenderSettings.ambientLight = daySkyColor;
+        directionalLight.color = dayLightColor;
+        directionalLight.intensity = dayIntensity;
+        isDay = true;
+    }
+
+    void SetNight()
+    {
+        RenderSettings.ambientLight = nightSkyColor;
+        directionalLight.color = nightLightColor;
+        directionalLight.intensity = nightIntensity;
+        isDay = false;
+    }
+}

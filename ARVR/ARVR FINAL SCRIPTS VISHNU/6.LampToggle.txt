@@ -1,0 +1,18 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class LampToggle : MonoBehaviour
+{
+    public Light lampLight;
+
+    private bool isOn = true;
+
+    void Update()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            isOn = !isOn;
+            lampLight.enabled = isOn;
+        }
+    }
+}

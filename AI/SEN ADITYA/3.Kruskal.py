@@ -1,0 +1,34 @@
+def find(p, i):
+    while p[i] != i:
+        i = p[i]
+    return i
+
+def union(p, x, y):
+    p[find(p, y)] = find(p, x)
+
+# Input
+n = int(input("Enter number of vertices: "))
+e = int(input("Enter number of edges: "))
+edges = []
+
+print("Enter edges (u v weight):")
+for _ in range(e):
+    u, v, w = map(int, input().split())
+    edges.append((w, u, v))
+
+edges.sort()
+parent = [i for i in range(n)]
+mst = []
+
+for w, u, v in edges:
+    if find(parent, u) != find(parent, v):
+        mst.append((u, v, w))
+        union(parent, u, v)
+
+# Output
+print("\nMinimum Spanning Tree:")
+tc=0
+for u, v, w in mst:
+    tc+=w
+    print(f"{u} --> {v} == {w}")
+print(tc)

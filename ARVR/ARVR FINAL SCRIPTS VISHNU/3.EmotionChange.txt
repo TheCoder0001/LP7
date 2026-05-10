@@ -1,0 +1,57 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class EmotionChange : MonoBehaviour
+{
+    public GameObject neutralMouth;
+    public GameObject happyMouth;
+    public GameObject sadMouth;
+    public GameObject angryMouth;
+    public GameObject leftBrow;
+    public GameObject rightBrow;
+
+    int emotion = 0;
+
+    void Update()
+    {
+        // New Input System mouse click
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            emotion++;
+
+            if (emotion > 3)
+                emotion = 0;
+
+            ShowEmotion();
+        }
+    }
+
+    void ShowEmotion()
+    {
+        neutralMouth.SetActive(false);
+        happyMouth.SetActive(false);
+        sadMouth.SetActive(false);
+        angryMouth.SetActive(false);
+        leftBrow.SetActive(false);
+        rightBrow.SetActive(false);
+
+        if (emotion == 0)
+        {
+            neutralMouth.SetActive(true);
+        }
+        else if (emotion == 1)
+        {
+            happyMouth.SetActive(true);
+        }
+        else if (emotion == 2)
+        {
+            sadMouth.SetActive(true);
+        }
+        else if (emotion == 3)
+        {
+            angryMouth.SetActive(true);
+            leftBrow.SetActive(true);
+            rightBrow.SetActive(true);
+        }
+    }
+}

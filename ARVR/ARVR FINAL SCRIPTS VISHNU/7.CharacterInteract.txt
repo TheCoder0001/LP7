@@ -1,0 +1,48 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class CharacterInteract : MonoBehaviour
+{
+    int state = 0;
+    Vector3 startPos;
+
+    void Start()
+    {
+        startPos = transform.position;
+    }
+
+    void Update()
+    {
+        // Left click → cycle actions
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            state++;
+
+            if (state > 3)
+                state = 1;
+
+            if (state == 1)
+            {
+                // move
+                transform.position += new Vector3(1f, 0, 0);
+            }
+            else if (state == 2)
+            {
+                // rotate
+                transform.Rotate(0, 90, 0);
+            }
+            else if (state == 3)
+            {
+                // jump
+                transform.position = startPos + new Vector3(0, 1f, 0);
+            }
+        }
+
+        // Right click → reset
+        if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            transform.position = startPos;
+            transform.rotation = Quaternion.identity;
+        }
+    }
+}

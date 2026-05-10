@@ -1,0 +1,51 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+
+public class ImageTracker : MonoBehaviour
+{
+    public ARTrackedImageManager trackedImageManager;
+    public GameObject carPrefab;
+
+    private Dictionary<string, GameObject> spawnedObjects = new Dictionary<string, GameObject>();
+
+    void OnEnable()
+    {
+        trackedImageManager.trackedImagesChanged += OnImageChanged;
+    }
+
+    void OnDisable()
+    {
+        trackedImageManager.trackedImagesChanged -= OnImageChanged;
+    }
+
+    void OnImageChanged(ARTrackedImagesChangedEventArgs eventArgs)
+    {
+        foreach (var image in eventArgs.added)
+        {
+            SpawnOrUpdate(image);
+        }
+
+        foreach (var image in eventArgs.updated)
+        {
+            SpawnOrUpdate(image);
+        }
+    }
+
+    void SpawnOrUpdate(ARTrackedImage image)
+    {
+        string name = image.referenceImage.name;
+
+        if (!spawnedObjects.ContainsKey(name))
+        {
+            GameObject obj = Instantiate(carPrefab, image.transform);
+            spawnedObjects[name] = obj;
+        }
+
+        spawnedObjects[name].SetActive(image.trackingState == TrackingState.Tracking);
+
+        spawnedObjects[name].transform.position = image.transform.position;
+        spawnedObjects[name].transform.rotation = image.transform.rotation;
+    }
+}

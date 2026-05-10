@@ -1,0 +1,78 @@
+import java.util.*;
+
+public class NQueens {
+    
+    // Function to place queens using Backtracking
+    private static boolean placeQueens(int i, int[] cols, int[] leftDiagonal, int[] rightDiagonal, List<Integer> cur, int n) {
+        if (i == n) {
+            return true;
+        }
+
+        for (int j = 0; j < n; j++) {
+            // If the column or diagonals are already occupied, skip the position
+            if (cols[j] == 1 || rightDiagonal[i + j] == 1 || leftDiagonal[i - j + n - 1] == 1) {
+                continue;
+            }
+
+            // Place the queen and mark the column and diagonals as occupied
+            cols[j] = 1;
+            rightDiagonal[i + j] = 1;
+            leftDiagonal[i - j + n - 1] = 1;
+            cur.add(j);
+
+            // Recursively try to place the next queen
+            if (placeQueens(i + 1, cols, leftDiagonal, rightDiagonal, cur, n)) {
+                return true;
+            }
+
+            // If placing queen didn't work, backtrack
+            cur.remove(cur.size() - 1);
+            cols[j] = 0;
+            rightDiagonal[i + j] = 0;
+            leftDiagonal[i - j + n - 1] = 0;
+        }
+
+        return false;
+    }
+
+    // Function to solve the n-queens problem
+    private static List<List<String>> nQueen(int n) {
+        int[] cols = new int[n]; 
+        int[] leftDiagonal = new int[2 * n]; 
+        int[] rightDiagonal = new int[2 * n]; 
+        List<Integer> cur = new ArrayList<>();
+        List<List<String>> board = new ArrayList<>();
+
+        if (placeQueens(0, cols, leftDiagonal, rightDiagonal, cur, n)) {
+            // Convert the column positions into the board representation
+            for (int i = 0; i < n; i++) {
+                List<String> row = new ArrayList<>(Collections.nCopies(n, "."));
+                row.set(cur.get(i), "Q");
+                board.add(row);
+            }
+            return board;
+        } else {
+            return null;
+        }
+    }
+
+    // Function to print the board
+    private static void printBoard(List<List<String>> board) {
+        if (board != null) {
+            for (List<String> row : board) {
+                System.out.println(String.join(" ", row));
+            }
+        } else {
+            System.out.println("No solution exists.");
+        }
+    }
+
+    // Main function to take input and solve the problem
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of queens: ");
+        int n = sc.nextInt();
+        List<List<String>> board = nQueen(n);
+        printBoard(board);
+    }
+}
